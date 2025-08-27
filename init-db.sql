@@ -1,5 +1,5 @@
--- Banking System Database Schema
--- Supports Individual, Business, and VIP customers
+
+USE banking_db;
 
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
