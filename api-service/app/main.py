@@ -2,24 +2,35 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import sys
+from contextlib import asynccontextmanager
 
 sys.path.append('/app')
 sys.path.append('/app/db')
 
 from .routers import health, customers, accounts, transactions
+from .kafka_client import kafka_producer
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    await kafka_producer.start()
+    yield
+    # Shutdown
+    await kafka_producer.stop()
 
 app = FastAPI(
     title="Banking System API",
     description="Digital Banking System supporting Individual, Business and VIP customers",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify allowed origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
