@@ -16,4 +16,8 @@ COPY . .
 
 RUN mkdir -p /app/logs
 
-CMD ["python", "-c", "print('Consumer service placeholder - sleeping...'); import time; time.sleep(3600)"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import asyncio; from app.database import db_manager; print('Health check:', asyncio.run(db_manager.health_check()))" || exit 1
+
+CMD ["python", "-m", "app.main"]
