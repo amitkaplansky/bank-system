@@ -39,7 +39,7 @@ git clone <repository>
 cd bank-system
 docker-compose up --build
 
-# API will be available at http://localhost:8000
+# API available at http://localhost:8000
 ```
 
 ### Test the API
@@ -47,9 +47,6 @@ docker-compose up --build
 # View customers and accounts
 curl http://localhost:8000/api/v1/customers/
 curl http://localhost:8000/api/v1/accounts/
-
-
-## Architecture
 
 **Services**:
 - **FastAPI Banking API** (port 8000) - Core banking operations
