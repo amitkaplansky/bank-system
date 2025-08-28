@@ -4,16 +4,16 @@ import enum
 from .base import BaseModel
 
 class AccountType(enum.Enum):
-    CHECKING = "checking"
-    SAVINGS = "savings"
-    BUSINESS = "business"
-    VIP = "vip"
+    CHECKING = "CHECKING"
+    SAVINGS = "SAVINGS"
+    BUSINESS = "BUSINESS"
+    VIP = "VIP"
 
 class AccountStatus(enum.Enum):
-    ACTIVE = "active"
-    INACTIVE = "inactive" 
-    FROZEN = "frozen"
-    CLOSED = "closed"
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE" 
+    FROZEN = "FROZEN"
+    CLOSED = "CLOSED"
 
 class Account(BaseModel):
     __tablename__ = "accounts"

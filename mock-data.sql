@@ -1,24 +1,24 @@
 INSERT INTO customers (name, customer_type, personal_id) VALUES 
-('Tony Stark', 'individual', '203948293'),
-('Steve Rogers', 'individual', '123456789');
+('Tony Stark', 'INDIVIDUAL', '203948293'),
+('Steve Rogers', 'INDIVIDUAL', '123456789');
 
 INSERT INTO customers (name, customer_type, business_number) VALUES 
-('TechnoCorp Ltd.', 'business', '514857392');
+('TechnoCorp Ltd.', 'BUSINESS', '514857392');
 
 -- 1 VIP Individual Customer
 INSERT INTO customers (name, customer_type, personal_id, vip_tier) VALUES 
-('Natasha Romanoff', 'individual', '987654321', 'Gold');
+('Natasha Romanoff', 'INDIVIDUAL', '987654321', 'Gold');
 
 -- 1 VIP Business Customer
 INSERT INTO customers (name, customer_type, business_number, vip_tier) VALUES 
-('Stark Industries', 'business', '999888777', 'Platinum');
+('Stark Industries', 'BUSINESS', '999888777', 'Platinum');
 
 INSERT INTO accounts (customer_id, account_number, account_type, balance, currency) VALUES 
-(1, 'ACC-1001', 'checking', 1500.00, 'ILS'),      -- Tony Stark (individual)
-(2, 'ACC-1002', 'savings', 3500.00, 'ILS'),       -- Steve Rogers (individual)  
-(3, 'ACC-2002', 'business', 8000.00, 'ILS'),      -- TechnoCorp Ltd. (business)
-(4, 'ACC-3001', 'vip', 25000.00, 'ILS'),          -- Natasha Romanoff (VIP individual)
-(5, 'ACC-4001', 'vip', 50000.00, 'ILS');          -- Stark Industries (VIP business)
+(1, 'ACC-1001', 'CHECKING', 1500.00, 'ILS'),      -- Tony Stark (individual)
+(2, 'ACC-1002', 'SAVINGS', 3500.00, 'ILS'),       -- Steve Rogers (individual)  
+(3, 'ACC-2002', 'BUSINESS', 8000.00, 'ILS'),      -- TechnoCorp Ltd. (business)
+(4, 'ACC-3001', 'VIP', 25000.00, 'ILS'),          -- Natasha Romanoff (VIP individual)
+(5, 'ACC-4001', 'VIP', 50000.00, 'ILS');          -- Stark Industries (VIP business)
 
 INSERT INTO transactions (
     transaction_id, from_account_id, to_account_id, 

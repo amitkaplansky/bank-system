@@ -4,7 +4,7 @@ USE banking_db;
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    customer_type ENUM('individual', 'business') NOT NULL,
+    customer_type ENUM('INDIVIDUAL', 'BUSINESS') NOT NULL,
     
     -- Individual customer fields
     personal_id VARCHAR(20) NULL,
@@ -35,10 +35,10 @@ CREATE TABLE accounts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
     account_number VARCHAR(50) NOT NULL UNIQUE,
-    account_type ENUM('checking', 'savings', 'business', 'vip') NOT NULL DEFAULT 'checking',
+    account_type ENUM('CHECKING', 'SAVINGS', 'BUSINESS', 'VIP') NOT NULL DEFAULT 'CHECKING',
     balance DECIMAL(15,2) NOT NULL DEFAULT 0.00,
     currency VARCHAR(3) NOT NULL DEFAULT 'ILS',
-    status ENUM('active', 'inactive', 'frozen', 'closed') NOT NULL DEFAULT 'active',
+    status ENUM('ACTIVE', 'INACTIVE', 'FROZEN', 'CLOSED') NOT NULL DEFAULT 'ACTIVE',
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -4,8 +4,8 @@ import enum
 from .base import BaseModel
 
 class CustomerType(enum.Enum):
-    INDIVIDUAL = "individual"
-    BUSINESS = "business"
+    INDIVIDUAL = "INDIVIDUAL"
+    BUSINESS = "BUSINESS"
 
 class Customer(BaseModel):
     """
