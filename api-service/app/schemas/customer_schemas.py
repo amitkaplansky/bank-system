@@ -9,20 +9,20 @@ class CustomerBase(BaseModel):
     address: Optional[str] = None
 
 class CustomerCreate(CustomerBase):
-    customer_type: Literal["individual", "business"]
+    customer_type: Literal["INDIVIDUAL", "BUSINESS"]
     personal_id: Optional[str] = None
     business_number: Optional[str] = None
     vip_tier: Optional[str] = None  # Gold, Platinum, Diamond
     
     @validator('personal_id')
     def validate_personal_id(cls, v, values):
-        if values.get('customer_type') == 'individual' and not v:
+        if values.get('customer_type') == 'INDIVIDUAL' and not v:
             raise ValueError('personal_id is required for individual customers')
         return v
     
     @validator('business_number')
     def validate_business_number(cls, v, values):
-        if values.get('customer_type') == 'business' and not v:
+        if values.get('customer_type') == 'BUSINESS' and not v:
             raise ValueError('business_number is required for business customers')
         return v
     
