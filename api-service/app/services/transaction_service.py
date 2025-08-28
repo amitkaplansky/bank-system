@@ -12,6 +12,7 @@ sys.path.append('/app/db')
 from db.models.transaction import Transaction, TransactionStatus
 from db.models.account import Account
 from .account_service import AccountService
+from ..kafka_client import kafka_producer, KafkaTopics
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class TransactionService:
                 raise ValueError("Currency mismatch between accounts and transfer request")
             
             # Check daily limits
-            await AccountService.check_daily_transfer_limits(from_account, amount)
+            await AccountService.check_daily_transfer_limits(session, from_account, amount)
             
             # Capture balances before transaction
             from_balance_before = from_account.balance
@@ -99,6 +100,18 @@ class TransactionService:
             # Commit the entire transaction
             await session.commit()
             
+            # Send Kafka event AFTER successful DB commit
+            try:
+                kafka_event = transaction.to_kafka_event()
+                await kafka_producer.send_transaction_event(
+                    topic=KafkaTopics.COMPLETED_TRANSACTIONS,
+                    transaction_data=kafka_event,
+                    transaction_id=transaction_id
+                )
+            except Exception as kafka_error:
+                logger.warning(f"Failed to send Kafka event: {kafka_error}")
+                # Don't fail the transaction if Kafka fails
+            
             logger.info(
                 f"Transfer completed: {transaction_id} - "
                 f"From {from_account_id} to {to_account_id}, Amount: {amount} {currency}"
@@ -113,6 +126,24 @@ class TransactionService:
             if 'transaction' in locals():
                 transaction.status = TransactionStatus.FAILED
                 await session.commit()
+                
+                # Send failed transaction event
+                try:
+                    failed_event = {
+                        "event_type": "failed_transaction",
+                        "timestamp": datetime.utcnow().isoformat() + "Z",
+                        "transaction_id": transaction.transaction_id,
+                        "error_message": str(e),
+                        "retry_count": 0,
+                        "original_event": transaction.to_kafka_event()
+                    }
+                    await kafka_producer.send_transaction_event(
+                        topic=KafkaTopics.FAILED_TRANSACTIONS,
+                        transaction_data=failed_event,
+                        transaction_id=transaction.transaction_id
+                    )
+                except Exception as kafka_error:
+                    logger.warning(f"Failed to send failed transaction event: {kafka_error}")
             
             logger.error(f"Transfer failed: {e}")
             raise
